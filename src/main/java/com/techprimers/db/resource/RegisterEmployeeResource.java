@@ -49,62 +49,57 @@ public class RegisterEmployeeResource {
 	EmployeePerformanceRepository employeePerformanceRepository;
 
     @PostMapping(value = "/load")
-    public List<EmployeeDetails> persist(@RequestBody final EmployeeDetails employeeDetail) {
-    	Users user = new Users();
-    	user.setUsername(employeeDetail.getUsername());
-    	user.setPassword(employeeDetail.getPassword());
-    	userRepository.save(user);
+    public String persist(@RequestBody final EmployeeDetails employeeDetail) {
     	
-    	Address address = new Address();
-    	address.setAddress(employeeDetail.getAddress());
-    	addressRepository.save(address);
+    	AddressResource.setRepo(addressRepository);
+    	EmployeePerformanceResource.setRepo(employeePerformanceRepository);
+    	EmployeeResource.setRepo(employeeRepository);
+    	EmployeeResumeResource.setRepo(employeeResumeRepository);
+    	EmployeeSkillsResource.setRepo(employeeSkillsRepository);
+    	JobStatusResource.setRepo(jobStatusRepository);
+    	SkillsResource.setRepo(skillsRepository);
+    	UsersResource.setRepo(userRepository);
     	
-    	JobStatus jobStatus = new JobStatus();
-    	jobStatus.setJobStatusText(employeeDetail.getJobStatusText());
-    	jobStatusRepository.save(jobStatus);
+    	if((UsersResource.checkIfUserExist(employeeDetail.getUsername()) == true) ||
+    			(EmployeeResource.checkIfEmployeeExist(employeeDetail.getUsername()) == true)){
+    		return String.format("Username already exists");
+    	}
+    	if(UsersResource.addNewUser(employeeDetail.getUsername(), 
+    			employeeDetail.getPassword()) == false) {
+    		return String.format("Failed to add user");
+    	}
     	
-    	Employee employee = new Employee();
-    	int addressId = addressRepository.findByAddress(employeeDetail.getAddress()).getAddressId();
-    	employee.setAddressId(addressId);
-    	employee.setDob(employeeDetail.getDob());
-    	employee.setEmail(employeeDetail.getEmail());
-    	int jobStatusId = jobStatusRepository.findByJobStatusText(employeeDetail.getJobStatusText()).getJobStatusId();
-    	employee.setJobStatusId(jobStatusId);
-    	employee.setName(employeeDetail.getName());
-    	employee.setUsername(employeeDetail.getUsername());
-    	employee.setSalaryPerHour(employeeDetail.getSalaryPerHour());
-    	employeeRepository.save(employee);
+    	int addressId = AddressResource.getAddressId(employeeDetail.getAddress());
+    	int jobStatusId = JobStatusResource.getJobStatusId(employeeDetail.getJobStatusText());
     	
-    	int employeeId = employeeRepository.findByUsername(employeeDetail.getUsername()).getEmployeeId();
-    	EmployeeResume employeeResume = new EmployeeResume();
-    	employeeResume.setEmployeeId(employeeId);
-    	employeeResume.setResumeDate(employeeDetail.getResumeDate());
-    	employeeResume.setResumeText(employeeDetail.getResumeText());
-    	employeeResumeRepository.save(employeeResume);
+    	if(EmployeeResource.addNewEmployee(employeeDetail.getName(), jobStatusId,
+				employeeDetail.getDob(), employeeDetail.getEmail(), employeeDetail.getUsername(),
+				addressId, employeeDetail.getSalaryPerHour()) == false) {
+    		return String.format("Failed to add employee");
+		}
+    	
+    	int employeeId = EmployeeResource.getEmployeeId(employeeDetail.getUsername());
+    	if(EmployeeResumeResource.addNewEmployeeResume(employeeId, employeeDetail.getResumeDate(), 
+    			employeeDetail.getResumeText()) == false) {
+    		return String.format("Failed to add employee resume");
+    	}
     	
     	List<Skills> skillNames = employeeDetail.getSkillName();
     	List<EmployeeSkills> skillExperience = employeeDetail.getYearsExperience();
+    	EmployeeSkillsResource.deleteAllSkills(employeeId);
     	
     	for(int i = 0; i < skillNames.size(); i++) {
-    		Skills skillName = skillNames.get(i);
-    		skillsRepository.save(skillName);
-    		
-    		int skillId = skillsRepository.findBySkillName(skillName.getSkillName()).getSkillId();
-    		EmployeeSkills exp = skillExperience.get(i);
-    		exp.setEmployeeId(employeeId);
-    		exp.setSkillId(skillId);
-    		employeeSkillsRepository.save(exp);
-    		//employeeSkills.setEmployeeId();
-    		//employeeSkills.setSkillId();
-    		//employeeSkills.setYearsExperience(skillExperience.get(i));
+    		Integer skillId = SkillsResource.getSkillId(skillNames.get(i));
+    		if(EmployeeSkillsResource.addNewEmployeeSkills(employeeId, skillId, 
+    				skillExperience.get(i).getYearsExperience()) == false) {
+    			return String.format("Failed to add employee skill");
+    		}
     	}
     	
-    	EmployeePerformance employeePerformance = new EmployeePerformance();
-    	employeePerformance.setEmployeeId(employeeId);
-    	employeePerformance.setRatingScaleTen(0);
-    	employeePerformance.setRatingYear(0);
-    	employeePerformanceRepository.save(employeePerformance);
+    	if(EmployeePerformanceResource.addNewEmployeePerformance(employeeId) == false) {
+    		return String.format("Failed to add employee performance");
+    	}
     	
-        return null;
+    	return String.format("Employee has been added");
     }
 }

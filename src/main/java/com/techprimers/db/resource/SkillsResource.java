@@ -1,7 +1,9 @@
 package com.techprimers.db.resource;
 
 import com.techprimers.db.model.Address;
+import com.techprimers.db.model.Skills;
 import com.techprimers.db.repository.AddressRepository;
+import com.techprimers.db.repository.EmployeePerformanceRepository;
 import com.techprimers.db.repository.SkillsRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +16,23 @@ import java.util.List;
 public class SkillsResource {
 
 	@Autowired
-	SkillsRepository skillRepository;
+	private static SkillsRepository skillsRepository;
 	
-	static void checkIfSkillExist(String skillName) {
-		
+	public static void setRepo(SkillsRepository inSkillsRepository) {
+		skillsRepository = inSkillsRepository;
+    }
+	
+	public static Skills checkOrAddSkill(Skills skill) {
+		Skills res = skillsRepository.findBySkillName(skill.getSkillName());
+		if(res == null) {
+			skillsRepository.save(skill);
+			res = skillsRepository.findBySkillName(skill.getSkillName());
+		}
+		return res;
+	}
+	
+	public static Integer getSkillId(Skills skill) {
+		int skillId = checkOrAddSkill(skill).getSkillId();
+		return skillId;
 	}
 }
