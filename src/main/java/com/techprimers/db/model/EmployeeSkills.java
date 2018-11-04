@@ -2,13 +2,11 @@ package com.techprimers.db.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 public class EmployeeSkills {
 	@Id
-    @GeneratedValue
     @Column(name = "skill_id")
     private Integer skillId;
 	@Column(name = "employee_id")

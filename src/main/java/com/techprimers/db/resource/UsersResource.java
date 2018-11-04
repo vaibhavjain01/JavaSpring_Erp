@@ -20,8 +20,10 @@ public class UsersResource {
     }
 
     @PostMapping(value = "/load")
-    public List<Users> persist(@RequestBody final Users users) {
-        usersRepository.save(users);
+    public List<Users> persist(@RequestBody final List<Users> users) {
+    	for(Users user : users) {
+    		usersRepository.save(user);
+    	}
         return usersRepository.findAll();
     }
 

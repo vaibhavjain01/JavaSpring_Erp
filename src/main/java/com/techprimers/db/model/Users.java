@@ -13,8 +13,11 @@ public class Users {
     private String username;
     @Column(name = "password")
     private String password;
+    @Column(name = "usertype")
+    private String usertype;
 
     public Users() {
+    	usertype = "employee";
     }
 
     public String getUsername() {
@@ -31,5 +34,13 @@ public class Users {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    
+    public String getUsertype() {
+        return usertype;
+    }
+
+    public void setUsertype(String usertype) {
+        this.usertype = usertype;
     }
 }
