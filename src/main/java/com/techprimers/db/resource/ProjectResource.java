@@ -15,6 +15,17 @@ import java.util.List;
 public class ProjectResource {
 	private static ProjectRepository projectRepository;
 	
+	public static boolean checkRepo() {
+		if(projectRepository == null) {
+			return false;
+		}
+		return true;
+	}
+	
+	public static void setRepo(ProjectRepository inProjectRepository) {
+		projectRepository = inProjectRepository;
+	}
+	
 	public static boolean addProject(String projectName, String startDate, String endDate) {
 		if(projectRepository == null) {
 			return false;

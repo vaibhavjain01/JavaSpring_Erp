@@ -16,6 +16,10 @@ public class ProjectBudgetResource {
 	@Autowired
 	private static ProjectBudgetRepository projectBudgetRepository;
 	
+	public static void setRepo(ProjectBudgetRepository inProjectBudgetRepository) {
+		projectBudgetRepository = inProjectBudgetRepository;
+	}
+	
 	public static boolean checkRepo() {
 		if(projectBudgetRepository == null) {
 			return false;

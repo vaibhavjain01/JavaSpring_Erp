@@ -15,6 +15,17 @@ import java.util.List;
 public class ProjectEmployeesResource {
 	private static ProjectEmployeesRepository projectEmployeesRepository;
 	
+	public static boolean checkRepo() {
+		if(projectEmployeesRepository == null) {
+			return false;
+		}
+		return true;
+	}
+	
+	public static void setRepo(ProjectEmployeesRepository inProjectEmployeesRepository) {
+		projectEmployeesRepository = inProjectEmployeesRepository;
+	}
+	
 	public static boolean checkIfEmpAssignedToProj(Integer empId, Integer projId) {
 		if(projectEmployeesRepository == null) {
 			return false;
@@ -42,5 +53,19 @@ public class ProjectEmployeesResource {
 		}
 		projectEmployeesRepository.deleteByProjectIdAndEmployeeId(projId, empId);
 		return true;
+	}
+	
+	public static List<ProjectEmployees> getEmployeesInProject(Integer projId) {
+		if(checkRepo() == false) {
+			return null;
+		}
+		return projectEmployeesRepository.findByProjectId(projId);
+	}
+	
+	public static List<ProjectEmployees> getProjectsOfEmployee(Integer empId) {
+		if(checkRepo() == false) {
+			return null;
+		}
+		return projectEmployeesRepository.findByEmployeeId(empId);
 	}
 }
