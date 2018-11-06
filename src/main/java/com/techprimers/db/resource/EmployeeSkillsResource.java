@@ -8,6 +8,7 @@ import com.techprimers.db.repository.EmployeePerformanceRepository;
 import com.techprimers.db.repository.EmployeeSkillsRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,17 +24,21 @@ public class EmployeeSkillsResource {
     }
 	
 	public static boolean checkIfEmployeeSkillsExist(Integer empId) {
-		EmployeeSkills res = employeeSkillsRepository.findByEmployeeId(empId);
+		List<EmployeeSkills> res = employeeSkillsRepository.findByEmployeeId(empId);
 		if(res == null) {
 			return false;
 		}
 		return true;
 	}
 	
+	@Transactional
 	public static boolean deleteAllSkills(Integer empId) {
-		EmployeeSkills res = employeeSkillsRepository.findByEmployeeId(empId);
+		List<EmployeeSkills> res = employeeSkillsRepository.findByEmployeeId(empId);
 		if(res != null) {
-			employeeSkillsRepository.deleteByEmployeeId(empId);
+			for(EmployeeSkills es : res) {
+				employeeSkillsRepository.deleteByEmployeeIdAndSkillId(es.getEmployeeId(), es.getSkillId());
+			}
+			
 		}
 		return true;
 	}

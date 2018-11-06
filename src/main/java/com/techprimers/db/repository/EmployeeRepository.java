@@ -6,5 +6,5 @@ import com.techprimers.db.model.Employee;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 	Employee findByUsername(String username);
-	boolean deleteByUsername(String username);
+	Integer deleteByUsername(String username);
 }

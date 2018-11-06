@@ -3,6 +3,7 @@ package com.techprimers.db.resource;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -96,6 +97,7 @@ public class RegisterEmployeeResource {
     }
     
     @PostMapping(value = "/delete")
+    @Transactional
     public String deleteEmployee(@RequestBody final EmployeeDetails employeeDetail) {
     	setAllRepo();
     	
@@ -131,6 +133,10 @@ public class RegisterEmployeeResource {
     	
     	if(UsersResource.deleteUser(employeeDetail.getUsername()) == false) {
     		return String.format("Failed to delete username");
+    	}
+    	
+    	if(EmployeeResource.deleteEmployee(employeeDetail.getUsername()) == false) {
+    		return String.format("Failed to delete employee");
     	}
     		
     	return String.format("Employee has been deleted");
