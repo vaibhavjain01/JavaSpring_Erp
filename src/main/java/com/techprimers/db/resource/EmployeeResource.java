@@ -64,4 +64,12 @@ public class EmployeeResource {
 		}
 		return emp.getEmployeeId();
 	}
+	
+	public static boolean deleteEmployee(String userName) {
+		if(employeeRepository == null) {
+			return false;
+		}
+		employeeRepository.deleteByUsername(userName);
+		return true;
+	}
 }

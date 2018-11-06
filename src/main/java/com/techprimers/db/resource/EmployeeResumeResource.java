@@ -48,4 +48,25 @@ public class EmployeeResumeResource {
 	public static boolean addNewEmployeeResume(Integer empId, String resumeText, String resumeDate) {
 		return addEmployeeResume(empId, resumeText, resumeDate);		
 	}
+	
+	public static boolean modifyEmployeeResume(Integer resumeId, Integer employeeId, 
+			String resumeDate, String resumeText) {
+		EmployeeResume empRes = new EmployeeResume();
+		empRes.setResumeId(resumeId);
+		empRes.setEmployeeId(employeeId);
+		empRes.setResumeDate(resumeDate);
+		empRes.setResumeText(resumeText);
+		employeeResumeRepository.save(empRes);
+		return true;
+	}
+	
+	public static boolean deleteEmployeeResume(Integer empId) {
+		if(employeeResumeRepository == null) {
+			return false;
+		}
+		
+		Integer empResId = employeeResumeRepository.findByEmployeeId(empId).getResumeId();
+		employeeResumeRepository.delete(empResId);
+		return true;
+	}
 }

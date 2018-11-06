@@ -50,15 +50,7 @@ public class RegisterEmployeeResource {
 
     @PostMapping(value = "/load")
     public String persist(@RequestBody final EmployeeDetails employeeDetail) {
-    	
-    	AddressResource.setRepo(addressRepository);
-    	EmployeePerformanceResource.setRepo(employeePerformanceRepository);
-    	EmployeeResource.setRepo(employeeRepository);
-    	EmployeeResumeResource.setRepo(employeeResumeRepository);
-    	EmployeeSkillsResource.setRepo(employeeSkillsRepository);
-    	JobStatusResource.setRepo(jobStatusRepository);
-    	SkillsResource.setRepo(skillsRepository);
-    	UsersResource.setRepo(userRepository);
+    	setAllRepo();
     	
     	if((UsersResource.checkIfUserExist(employeeDetail.getUsername()) == true) ||
     			(EmployeeResource.checkIfEmployeeExist(employeeDetail.getUsername()) == true)){
@@ -101,5 +93,57 @@ public class RegisterEmployeeResource {
     	}
     	
     	return String.format("Employee has been added");
+    }
+    
+    @PostMapping(value = "/delete")
+    public String deleteEmployee(@RequestBody final EmployeeDetails employeeDetail) {
+    	setAllRepo();
+    	
+    	if((UsersResource.checkIfUserExist(employeeDetail.getUsername()) != true) ||
+    			(EmployeeResource.checkIfEmployeeExist(employeeDetail.getUsername()) != true)){
+    		return String.format("Username doesn't exists");
+    	}
+    	
+    	Employee emp = employeeRepository.findByUsername(employeeDetail.getUsername());
+    	Integer employeeId = emp.getEmployeeId();
+    	Integer addressId = emp.getAddressId();
+    	Integer jobStatusId = emp.getJobStatusId();
+    	
+    	if(EmployeePerformanceResource.deleteEmployeePerformance(employeeId) == false) {
+    		return String.format("Failed to delete employee performance");
+    	}
+
+    	if(EmployeeSkillsResource.deleteAllSkills(employeeId) == false) {
+    		return String.format("Failed to delete employee skills");
+    	}
+    	
+    	if(EmployeeResumeResource.deleteEmployeeResume(employeeId) == false) {
+    		return String.format("Failed to delete employee resume");
+    	}
+    	
+    	if(AddressResource.deleteAddress(addressId) == false) {
+    		return String.format("Failed to delete address");
+    	}
+    	
+    	if(JobStatusResource.deleteJobStatus(jobStatusId) == false) {
+    		return String.format("Failed to delete address");
+    	}
+    	
+    	if(UsersResource.deleteUser(employeeDetail.getUsername()) == false) {
+    		return String.format("Failed to delete username");
+    	}
+    		
+    	return String.format("Employee has been deleted");
+    }
+    
+    public void setAllRepo() {
+    	AddressResource.setRepo(addressRepository);
+    	EmployeePerformanceResource.setRepo(employeePerformanceRepository);
+    	EmployeeResource.setRepo(employeeRepository);
+    	EmployeeResumeResource.setRepo(employeeResumeRepository);
+    	EmployeeSkillsResource.setRepo(employeeSkillsRepository);
+    	JobStatusResource.setRepo(jobStatusRepository);
+    	SkillsResource.setRepo(skillsRepository);
+    	UsersResource.setRepo(userRepository);
     }
 }

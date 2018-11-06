@@ -47,4 +47,12 @@ public class AddressResource {
 	public static void setRepo(AddressRepository inAddressRepository) {
     	addressRepository = inAddressRepository;
     }
+	
+	public static boolean deleteAddress(Integer addressId) {
+		if(addressRepository == null) {
+			return false;
+		}
+		addressRepository.delete(addressId);
+		return true;
+	}
 }

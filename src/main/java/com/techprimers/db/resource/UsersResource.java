@@ -58,5 +58,20 @@ public class UsersResource {
 	public static boolean addNewUser(String username, String password) {
 		return addUser(username, password);
 	}
+	
+	public static boolean deleteUser(String username) {
+		if(usersRepository == null) {
+			return false;
+		}
+		usersRepository.deleteByUsername(username);
+		return true;
+	}
+	
+	public static boolean changePassword(String username, String password) {
+		if(deleteUser(username) == true) {
+			return addNewUser(username, password);
+		}
+		return false;
+	}
 
 }

@@ -46,4 +46,12 @@ public class JobStatusResource {
 		int jobStatusId = checkOrAddJobStatus(jobStatus).getJobStatusId();
 		return jobStatusId;
 	}
+	
+	public static boolean deleteJobStatus(Integer jobStatusId) {
+		if(jobStatusRepository == null) {
+			return false;
+		}
+		jobStatusRepository.delete(jobStatusId);
+		return true;
+	}
 }

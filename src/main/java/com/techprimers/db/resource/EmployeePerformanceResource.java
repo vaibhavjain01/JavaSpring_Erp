@@ -49,4 +49,27 @@ public class EmployeePerformanceResource {
 	public static boolean addNewEmployeePerformance(Integer empId) {
 		return addEmployeePerformance(empId, 0, 0);		
 	}
+	
+	public static boolean deleteEmployeePerformance(Integer empId) {
+		if(employeePerformanceRepository == null) {
+			return false;
+		}
+		Integer empPerfId = employeePerformanceRepository.findByEmployeeId(empId).getEmployeePerformanceId();
+		employeePerformanceRepository.delete(empPerfId);
+		return true;
+	}
+	
+	public static boolean modifyEmployeePerformance(Integer empPerfId, Integer empId,
+			Integer ratingYear, Integer ratingScaleTen) {
+		if(employeePerformanceRepository == null) {
+			return false;
+		}
+		EmployeePerformance empPerf = new EmployeePerformance();
+		empPerf.setEmployeePerformanceId(empPerfId);
+		empPerf.setEmployeeId(empId);
+		empPerf.setRatingScaleTen(ratingScaleTen);
+		empPerf.setRatingYear(ratingYear);
+		employeePerformanceRepository.save(empPerf);
+		return true;
+	}
 }

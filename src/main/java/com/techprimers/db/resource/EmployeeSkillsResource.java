@@ -50,4 +50,11 @@ public class EmployeeSkillsResource {
 	public static boolean addNewEmployeeSkills(Integer empId, Integer skillId, Integer yearsOfExp) {
 		return addEmployeeSkills(empId, skillId, yearsOfExp);		
 	}
+	
+	public static boolean modifyEmployeeSkills(Integer skillId, Integer empId, Integer yearsOfExp) {
+		if(employeeSkillsRepository == null) {
+			return false;
+		}
+		return addEmployeeSkills(empId, skillId, yearsOfExp);
+	}
 }
