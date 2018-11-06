@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.techprimers.db.model.ProjectBudget;
 
 public interface ProjectBudgetRepository extends JpaRepository<ProjectBudget, Integer> {
-
+	ProjectBudget findByProjectId(Integer projectId);
+	boolean deleteByProjectId(Integer projectId);
 }

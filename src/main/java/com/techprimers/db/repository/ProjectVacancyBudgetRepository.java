@@ -5,5 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.techprimers.db.model.ProjectVacancyBudget;
 
 public interface ProjectVacancyBudgetRepository extends JpaRepository<ProjectVacancyBudget, Integer> {
-
+	ProjectVacancyBudget findByProjectVacancyId(Integer projectVacancyId);
+	boolean deleteByProjectVacancyId(Integer projectVacancyId);
+	
 }

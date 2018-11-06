@@ -15,6 +15,7 @@ public class ProjectVacancySkills {
     private Integer skillId;
 	@Column(name = "years_experience")
     private Integer yearsExperience;
+	
 	public Integer getProjectVacancyId() {
 		return projectVacancyId;
 	}

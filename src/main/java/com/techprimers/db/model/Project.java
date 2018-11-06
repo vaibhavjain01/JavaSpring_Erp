@@ -15,6 +15,9 @@ public class Project {
     private String startDate;
     @Column(name = "end_date")
     private String endDate;
+    @Column(name = "project_name")
+    private String projectName;
+    
 	public Integer getProjectId() {
 		return projectId;
 	}
@@ -26,6 +29,12 @@ public class Project {
 	}
 	public void setStartDate(String startDate) {
 		this.startDate = startDate;
+	}
+	public String getProjectName() {
+		return projectName;
+	}
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
 	public String getEndDate() {
 		return endDate;
