@@ -5,6 +5,7 @@ import com.techprimers.db.model.ProjectDetails;
 import com.techprimers.db.model.ProjectEmployees;
 import com.techprimers.db.repository.AddressRepository;
 import com.techprimers.db.repository.ProjectEmployeesRepository;
+import com.techprimers.db.repository.ProjectRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +17,12 @@ import java.util.List;
 public class ProjectEmployeesResource {
 	@Autowired
 	private static ProjectEmployeesRepository projectEmployeesRepository;
+	@Autowired
+	private static ProjectRepository projectRepository;
 	
 	@PostMapping(value = "/assign")
     public String persist(@RequestBody final List<ProjectEmployees> projectEmployees) {
-    	
+    	ProjectResource.setRepo(projectRepository);
 		if(projectEmployees.size() <= 0) {
 			return String.format("Not enough information provided");
 		}
@@ -36,9 +39,25 @@ public class ProjectEmployeesResource {
     	return String.format("Employees have been added to project");
     }
 	
+	public static boolean addProjectEmployees(List<ProjectEmployees> projectEmployees) {
+		if(projectEmployees.size() <= 0) {
+			return false;
+		}
+		
+		Integer projId = projectEmployees.get(0).getProjectId();
+		if(ProjectResource.checkIfProjectExists(projId) == false) {
+			return false;
+		}
+    	
+		for(ProjectEmployees projEmp : projectEmployees) {
+			ProjectEmployeesResource.assignEmpToProj(projEmp.getEmployeeId(), projId);
+		}
+		return true;
+	}
+	
 	@PostMapping(value = "/remove")
     public String persistRemove(@RequestBody final List<ProjectEmployees> projectEmployees) {
-    	
+		ProjectResource.setRepo(projectRepository);
 		if(projectEmployees.size() <= 0) {
 			return String.format("Not enough information provided");
 		}
@@ -54,6 +73,23 @@ public class ProjectEmployeesResource {
     	
     	return String.format("Employees have been deleted from project");
     }
+	
+	public static boolean removeProjectEmployee(List<ProjectEmployees> projectEmployees) {
+		if(projectEmployees.size() <= 0) {
+			return false;
+		}
+		
+		Integer projId = projectEmployees.get(0).getProjectId();
+		if(ProjectResource.checkIfProjectExists(projId) == false) {
+			return false;
+		}
+    	
+		for(ProjectEmployees projEmp : projectEmployees) {
+			ProjectEmployeesResource.deleteEmpFromProj(projEmp.getEmployeeId(), projId);
+		}
+    	
+    	return true;
+	}
 	
 	public static boolean checkRepo() {
 		if(projectEmployeesRepository == null) {

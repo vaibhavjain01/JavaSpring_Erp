@@ -9,6 +9,8 @@ import javax.persistence.Id;
 public class ProjectEmployees {
 	@Id
     @GeneratedValue
+    @Column(name = "project_employee_id")
+	private Integer projectEmployeeId;
     @Column(name = "project_id")
     private Integer projectId;
 	@Column(name = "employee_id")
@@ -24,5 +26,11 @@ public class ProjectEmployees {
 	}
 	public void setEmployeeId(Integer employeeId) {
 		this.employeeId = employeeId;
+	}
+	public Integer getProjectEmployeeId() {
+		return projectEmployeeId;
+	}
+	public void setProjectEmployeeId(Integer projectEmployeeId) {
+		this.projectEmployeeId = projectEmployeeId;
 	}
 }

@@ -1,5 +1,7 @@
 package com.techprimers.db.resource;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.techprimers.db.model.EmployeeDetails;
 import com.techprimers.db.model.Project;
 import com.techprimers.db.model.ProjectDetails;
+import com.techprimers.db.model.ProjectEmployees;
 import com.techprimers.db.repository.AddressRepository;
 import com.techprimers.db.repository.EmployeePerformanceRepository;
 import com.techprimers.db.repository.EmployeeRepository;
@@ -77,6 +80,26 @@ public class RegisterProjectResource {
     	}
     	
     	return String.format("Project has been deleted");
+    }
+    
+    @PostMapping(value = "/assign")
+    @Transactional
+    public String assignEmp(@RequestBody final List<ProjectEmployees> projectEmployees) {
+    	setRepos();
+    	if(ProjectEmployeesResource.addProjectEmployees(projectEmployees) == false) {
+    		return String.format("Failed to assign employees");
+    	}
+    	return String.format("Employees assigned successfully"); 
+    }
+    
+    @PostMapping(value = "/remove")
+    @Transactional
+    public String removeEmp(@RequestBody final List<ProjectEmployees> projectEmployees) {
+    	setRepos();
+    	if(ProjectEmployeesResource.removeProjectEmployee(projectEmployees) == false) {
+    		return String.format("Failed to remove employees");
+    	}
+    	return String.format("Employees removed successfully"); 
     }
     
     public void setRepos() {

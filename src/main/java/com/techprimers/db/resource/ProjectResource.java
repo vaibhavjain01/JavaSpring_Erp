@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/rest/project")
 public class ProjectResource {
+	@Autowired
 	private static ProjectRepository projectRepository;
 	
 	public static boolean checkRepo() {
