@@ -1,6 +1,7 @@
 package com.techprimers.db.resource;
 
 import com.techprimers.db.model.Address;
+import com.techprimers.db.model.ProjectDetails;
 import com.techprimers.db.model.ProjectEmployees;
 import com.techprimers.db.repository.AddressRepository;
 import com.techprimers.db.repository.ProjectEmployeesRepository;
@@ -13,7 +14,46 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/rest/projectemployees")
 public class ProjectEmployeesResource {
+	@Autowired
 	private static ProjectEmployeesRepository projectEmployeesRepository;
+	
+	@PostMapping(value = "/assign")
+    public String persist(@RequestBody final List<ProjectEmployees> projectEmployees) {
+    	
+		if(projectEmployees.size() <= 0) {
+			return String.format("Not enough information provided");
+		}
+		
+		Integer projId = projectEmployees.get(0).getProjectId();
+		if(ProjectResource.checkIfProjectExists(projId) == false) {
+			return String.format("Failed to find project");
+		}
+    	
+		for(ProjectEmployees projEmp : projectEmployees) {
+			ProjectEmployeesResource.assignEmpToProj(projEmp.getEmployeeId(), projId);
+		}
+    	
+    	return String.format("Employees have been added to project");
+    }
+	
+	@PostMapping(value = "/remove")
+    public String persistRemove(@RequestBody final List<ProjectEmployees> projectEmployees) {
+    	
+		if(projectEmployees.size() <= 0) {
+			return String.format("Not enough information provided");
+		}
+		
+		Integer projId = projectEmployees.get(0).getProjectId();
+		if(ProjectResource.checkIfProjectExists(projId) == false) {
+			return String.format("Failed to find project");
+		}
+    	
+		for(ProjectEmployees projEmp : projectEmployees) {
+			ProjectEmployeesResource.deleteEmpFromProj(projEmp.getEmployeeId(), projId);
+		}
+    	
+    	return String.format("Employees have been deleted from project");
+    }
 	
 	public static boolean checkRepo() {
 		if(projectEmployeesRepository == null) {
@@ -52,6 +92,19 @@ public class ProjectEmployeesResource {
 			return false;
 		}
 		projectEmployeesRepository.deleteByProjectIdAndEmployeeId(projId, empId);
+		return true;
+	}
+	
+	public static boolean deleteAllEmpFromProj(Integer projId) {
+		List<ProjectEmployees> projEmps = getEmployeesInProject(projId);
+		if(projEmps == null) {
+			return true;
+		}
+		for(ProjectEmployees projEmp : projEmps) {
+			if(deleteEmpFromProj(projEmp.getEmployeeId(), projId) == false) {
+				return false;
+			}
+		}
 		return true;
 	}
 	

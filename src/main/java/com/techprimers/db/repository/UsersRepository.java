@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UsersRepository extends JpaRepository<Users, Integer> {
 	Users findByUsername(String username);
-	void deleteByUsername(String username);
+	Integer deleteByUsername(String username);
 }

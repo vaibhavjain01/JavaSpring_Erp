@@ -65,6 +65,16 @@ public class ProjectResource {
 		return true;
 	}
 	
+	public static boolean checkIfProjectExists(Integer projectId) {
+		if(projectRepository == null) {
+			return false;
+		}
+		if(projectRepository.findByProjectId(projectId) == null) {
+			return false;
+		}
+		return true;
+	}
+	
 	public static boolean deleteProject(String projectName) {
 		if(checkIfProjectExists(projectName) == true) {
 			projectRepository.deleteByProjectName(projectName);

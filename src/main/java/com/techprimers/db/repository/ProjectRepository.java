@@ -6,5 +6,6 @@ import com.techprimers.db.model.Project;
 
 public interface ProjectRepository extends JpaRepository<Project, Integer> {
 	Project findByProjectName(String projectName);
-	boolean deleteByProjectName(String projectName);
+	Project findByProjectId(Integer projectId);
+	Integer deleteByProjectName(String projectName);
 }

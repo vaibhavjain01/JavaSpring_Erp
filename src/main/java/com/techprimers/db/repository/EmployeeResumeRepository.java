@@ -6,5 +6,5 @@ import com.techprimers.db.model.EmployeeResume;
 
 public interface EmployeeResumeRepository extends JpaRepository<EmployeeResume, Integer> {
 	EmployeeResume findByEmployeeId(Integer employeeId);
-	void deleteByEmployeeId(Integer employeeId);
+	Integer deleteByEmployeeId(Integer employeeId);
 }

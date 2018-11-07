@@ -49,6 +49,41 @@ public class ProjectVacancyResource {
 		return true;
 	}
 	
+	public static boolean deleteProjectVacancy(Integer projVacId) {
+		if(checkRepo() == false) {
+			return false;
+		}
+		projectVacancyRepository.delete(projVacId);
+		return true;
+	}
+	
+	public static boolean deleteAllProjectVacancies(Integer projId) {
+		if(checkRepo() == false) {
+			return false;
+		}
+		List<ProjectVacancy> projVacs = getVacancyByProjectId(projId);
+		
+		if(projVacs == null || projVacs.size() <= 0) {
+			return true;
+		}
+		
+		for(ProjectVacancy projVac : projVacs) {
+			
+			if(ProjectVacancyBudgetResource.deleteProjectVacancyBudget(projVac.getProjectVacancyId()) == false) {
+				return false;
+			}
+			
+			if(ProjectVacancySkillsResource.deleteProjectVacancySkill(projVac.getProjectVacancyId()) == false) {
+				return false;
+			}
+			
+			if(deleteProjectVacancy(projVac.getProjectVacancyId()) == false) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	public static List<ProjectVacancy> getVacancyByProjectId(Integer projId) {
 		if(checkRepo() == false) {
 			return null;

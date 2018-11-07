@@ -6,5 +6,5 @@ import com.techprimers.db.model.ProjectBudget;
 
 public interface ProjectBudgetRepository extends JpaRepository<ProjectBudget, Integer> {
 	ProjectBudget findByProjectId(Integer projectId);
-	boolean deleteByProjectId(Integer projectId);
+	Integer deleteByProjectId(Integer projectId);
 }

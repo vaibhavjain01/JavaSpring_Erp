@@ -10,7 +10,7 @@ public interface ProjectEmployeesRepository extends JpaRepository<ProjectEmploye
 	List<ProjectEmployees> findByProjectId(Integer projectId);
 	List<ProjectEmployees> findByEmployeeId(Integer employeeId);
 	ProjectEmployees findByProjectIdAndEmployeeId(Integer projectId, Integer employeeId);
-	boolean deleteByProjectId(Integer projectId);
-	boolean deleteByEmployeeId(Integer employeeId);
-	boolean deleteByProjectIdAndEmployeeId(Integer projectId, Integer employeeId);
+	Integer deleteByProjectId(Integer projectId);
+	Integer deleteByEmployeeId(Integer employeeId);
+	Integer deleteByProjectIdAndEmployeeId(Integer projectId, Integer employeeId);
 }

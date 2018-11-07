@@ -10,5 +10,5 @@ import com.techprimers.db.model.EmployeeSkills;
 
 public interface EmployeeSkillsRepository extends JpaRepository<EmployeeSkills, Integer> {
 	List<EmployeeSkills> findByEmployeeId(Integer employeeId);
-	void deleteByEmployeeIdAndSkillId(@Param("employee_id") Integer employeeId, @Param("skill_id") Integer skillId);
+	Integer deleteByEmployeeIdAndSkillId(@Param("employee_id") Integer employeeId, @Param("skill_id") Integer skillId);
 }

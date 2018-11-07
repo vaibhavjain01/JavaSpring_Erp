@@ -58,7 +58,11 @@ public class ProjectVacancySkillsResource {
 		if(checkRepo() == false) {
 			return false;
 		}
-		projectVacancySkillsRepository.deleteByProjectVacancyId(projVacId);
+		List<ProjectVacancySkills> projVacsSkills = 
+				projectVacancySkillsRepository.findByProjectVacancyId(projVacId);
+		for(ProjectVacancySkills pvs: projVacsSkills) {
+			projectVacancySkillsRepository.deleteByProjectVacancyIdAndSkillId(projVacId, pvs.getSkillId());
+		}
 		return true;
 	}
 }
