@@ -15,6 +15,16 @@ public class UsersResource {
     @Autowired
     private static UsersRepository usersRepository;
 
+    
+    @PostMapping(value = "/login")
+    public String authenticate(@RequestBody final Users users) {
+    	Users userLoggingIn = usersRepository.findByUsernameAndPassword(users.getUsername(), users.getPassword());
+    	if(userLoggingIn != null) {
+    		return String.format("User type " + userLoggingIn.getUsertype() + " logged in.");
+    	}
+    	return String.format("User authentication failed");
+    }
+    
     @GetMapping(value = "/all")
     public List<Users> getAll() {
         return usersRepository.findAll();

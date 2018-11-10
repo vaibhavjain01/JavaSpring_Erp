@@ -1,5 +1,6 @@
 package com.techprimers.db.resource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,6 +141,33 @@ public class RegisterEmployeeResource {
     	}
     		
     	return String.format("Employee has been deleted");
+    }
+    
+    @PostMapping(value = "/searchEmpSkill")
+    @Transactional
+    public String searchEmployeeBySkill(@RequestBody final Skills skill) {
+    	setAllRepo();
+    	Skills tempSkill = skillsRepository.findBySkillName(skill.getSkillName());
+    	if(tempSkill == null) {
+    		return String.format("No such skill exists in available skill pool");
+    	}
+    	Integer skillId = tempSkill.getSkillId();
+    	List<EmployeeSkills> empWithSkill = employeeSkillsRepository.findBySkillId(skillId);
+    	String employeesWithSkill = "{";
+    	for (int ctr = 0; ctr < empWithSkill.size(); ctr++) {
+    		Integer empId = empWithSkill.get(ctr).getEmployeeId();
+    		employeesWithSkill += "\"employeeName\" : \"" + employeeRepository.findByEmployeeId(empId).getName() + "\"";
+    		if((ctr + 1) < empWithSkill.size()) {
+    			employeesWithSkill += ",";
+    		}
+    		else {
+    			employeesWithSkill += "}";
+    		}
+    	}
+    	if(employeesWithSkill.length() > 2) {
+    		return String.format(employeesWithSkill);
+    	}
+    	return String.format("No employees found with that skill.");
     }
     
     public void setAllRepo() {

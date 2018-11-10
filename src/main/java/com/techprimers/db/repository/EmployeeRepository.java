@@ -6,5 +6,6 @@ import com.techprimers.db.model.Employee;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 	Employee findByUsername(String username);
+	Employee findByEmployeeId(Integer employeeId);
 	Integer deleteByUsername(String username);
 }
