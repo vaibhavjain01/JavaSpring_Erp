@@ -170,6 +170,19 @@ public class RegisterEmployeeResource {
     	return String.format("No employees found with that skill.");
     }
     
+    @PostMapping(value = "/setPerf")
+    @Transactional
+    public String setPerformanceInfo(@RequestBody final EmployeePerformance empPerf) {
+    	setAllRepo();
+		Integer empId = empPerf.getEmployeeId();
+		Integer ratingYear = empPerf.getRatingYear();
+		Integer ratingScale = empPerf.getRatingScaleTen();
+
+		EmployeePerformanceResource.addEmployeePerformance(empId, ratingYear, ratingScale);
+		
+		return String.format("Employee Performance Updated");
+    }
+    
     public void setAllRepo() {
     	AddressResource.setRepo(addressRepository);
     	EmployeePerformanceResource.setRepo(employeePerformanceRepository);

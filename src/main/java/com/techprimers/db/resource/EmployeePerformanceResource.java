@@ -1,8 +1,10 @@
 package com.techprimers.db.resource;
 
 import com.techprimers.db.model.Address;
+import com.techprimers.db.model.Employee;
 import com.techprimers.db.model.EmployeePerformance;
 import com.techprimers.db.model.EmployeeResume;
+import com.techprimers.db.model.Users;
 import com.techprimers.db.repository.AddressRepository;
 import com.techprimers.db.repository.EmployeePerformanceRepository;
 import com.techprimers.db.repository.UsersRepository;
@@ -17,6 +19,29 @@ import java.util.List;
 public class EmployeePerformanceResource {
 	@Autowired
 	private static EmployeePerformanceRepository employeePerformanceRepository;
+
+	@PostMapping(value = "/getPerf")
+    public String getPerformanceInfo(@RequestBody final Employee emp) {
+		Integer empId = emp.getEmployeeId();
+		String username = emp.getUsername();
+		
+		if((empId == null) && (username == null)) {
+			return String.format("Could not find the employee");
+		}
+		
+		if(empId == null) {
+			empId = EmployeeResource.getEmployeeId(username);
+			if(empId == null) {
+				return String.format("Could not find the employee");
+			}
+		}
+		
+		EmployeePerformance empPerf = employeePerformanceRepository.findByEmployeeId(empId);
+		String rt = "Rating out of 10/" + empPerf.getRatingScaleTen() + 
+				", in year: " + empPerf.getRatingYear();
+		
+		return String.format(rt);
+    }
 	
 	public static void setRepo(EmployeePerformanceRepository inemployeePerformanceRepository) {
 		employeePerformanceRepository = inemployeePerformanceRepository;
