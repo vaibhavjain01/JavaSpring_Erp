@@ -102,6 +102,24 @@ public class RegisterProjectResource {
     	return String.format("Employees removed successfully"); 
     }
     
+    @PostMapping(value = "/modify")
+    public String modify(@RequestBody final ProjectDetails projectDetail) {
+    	setRepos();
+    	
+    	if(ProjectResource.modifyProject(projectDetail.getProjectName(), 
+    			projectDetail.getStartDate(), projectDetail.getEndDate()) == false) {
+    		return String.format("Failed to modify project");
+    	}
+    	
+    	Integer projectId = projectRepository.findByProjectName(projectDetail.getProjectName()).getProjectId();
+    	
+    	if(ProjectBudgetResource.modifyProjectBudget(projectId, projectDetail.getProjectBudget()) == false) {
+    		return String.format("Failed to modify project");
+    	}
+    	
+    	return String.format("Project has been modified");
+    }
+    
     public void setRepos() {
     	ProjectResource.setRepo(projectRepository);
     	ProjectBudgetResource.setRepo(projectBudgetRepository);
