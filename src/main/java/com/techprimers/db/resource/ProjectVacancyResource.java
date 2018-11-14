@@ -36,6 +36,7 @@ public class ProjectVacancyResource {
 		projVacancy.setEstStartDate(estStartDate);
 		projVacancy.setJobStatusId(jobStatusId);
 		projVacancy.setProjectId(projId);
+		projectVacancyRepository.save(projVacancy);
 		return true;
 	}
 	

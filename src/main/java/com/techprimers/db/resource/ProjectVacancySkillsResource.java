@@ -44,6 +44,7 @@ public class ProjectVacancySkillsResource {
 		projVacSkill.setProjectVacancyId(projVacId);
 		projVacSkill.setSkillId(skillId);
 		projVacSkill.setYearsExperience(expYears);
+		projectVacancySkillsRepository.save(projVacSkill);
 		return true;
 	}
 	

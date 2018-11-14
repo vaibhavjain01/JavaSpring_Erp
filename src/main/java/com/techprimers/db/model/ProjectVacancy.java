@@ -19,6 +19,7 @@ public class ProjectVacancy {
     private String estStartDate;
     @Column(name = "est_end_date")
     private String estEndDate;
+    
 	public Integer getProjectVacancyId() {
 		return projectVacancyId;
 	}

@@ -63,4 +63,8 @@ public class ProjectVacancyBudgetResource {
 		projectVacancyBudgetRepository.deleteByProjectVacancyId(projVacancyId);
 		return true;
 	}
+	
+	public static void setRepo(ProjectVacancyBudgetRepository inProjectVacancyBudgetRepository) {
+		projectVacancyBudgetRepository = inProjectVacancyBudgetRepository;
+	}
 }
