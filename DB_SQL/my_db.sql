@@ -53,12 +53,13 @@ Create table skills (
 );
 	
 Create table employee_skills (
+	employee_skill_id int NOT NULL AUTO_INCREMENT,
 	skill_id int NOT NULL,
 	employee_id int NOT NULL,
 	years_experience int,
 	FOREIGN KEY (skill_id) REFERENCES myErp.skills (skill_id),
 	FOREIGN KEY (employee_id) REFERENCES myErp.employee (employee_id),
-	PRIMARY KEY (skill_id, employee_id)
+	PRIMARY KEY (employee_skill_id)
 );
 
 Create table employee_performance (
