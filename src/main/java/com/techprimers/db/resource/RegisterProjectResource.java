@@ -1,5 +1,6 @@
 package com.techprimers.db.resource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,6 +119,45 @@ public class RegisterProjectResource {
     	}
     	
     	return String.format("Project has been modified");
+    }
+    
+    @PostMapping(value = "/search")
+    public String search(@RequestBody final Project project) {
+    	setRepos();
+    	Project foundProject = null;
+    	List<Project> projects = null;
+    	
+    	if(project.getProjectName() != null) {
+    		foundProject = projectRepository.findByProjectName(project.getProjectName());
+    	}
+    	else if(project.getStartDate() != null) {
+    		projects = projectRepository.findByStartDate(project.getStartDate());
+    	}
+    	else if(project.getEndDate() != null) {
+    		projects = projectRepository.findByStartDate(project.getEndDate());
+    	}
+    	
+    	String rt = "No Project Found";
+    	if(foundProject != null) {
+    		rt = "Id: " + foundProject.getProjectId() + ", Name: " + foundProject.getProjectName() +
+    				", StartDate: " + foundProject.getStartDate() + ", EndDate: " + foundProject.getEndDate();
+    	}
+    	else if(projects != null) {
+    		for(int i = 0; i < projects.size(); i++) {
+    			foundProject = projects.get(i);
+    			if(i == 0) {
+    				rt = "Id: " + foundProject.getProjectId() + ", Name: " + foundProject.getProjectName() +
+        				", StartDate: " + foundProject.getStartDate() + ", EndDate: " + foundProject.getEndDate();
+    			}
+    			else {
+    				rt += "\n\nId: " + foundProject.getProjectId() + ", Name: " + foundProject.getProjectName() +
+            				", StartDate: " + foundProject.getStartDate() + ", EndDate: " + foundProject.getEndDate();
+    			}
+    		}
+    	}
+    	
+    	return rt;
+    	
     }
     
     public void setRepos() {
